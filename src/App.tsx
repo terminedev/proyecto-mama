@@ -1,3 +1,9 @@
+import Carousel from "./components/Carousel/Carousel";
+
 export default function App() {
-  return <h1>Proyecto mamá</h1>
+  return <main>
+    <h1>Proyecto mamá</h1>
+
+    <Carousel />
+  </main>
 };
