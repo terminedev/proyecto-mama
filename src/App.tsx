@@ -1,5 +1,5 @@
-import PreviewList from "./components/PreviewList/PreviewList";
-import infonavprev from './typed/infonavprev.example.json';
+import ListView from "./components/ListView/ListView";
+import listview from './components/ListView/listview.example.json';
 
 export default function App() {
 
@@ -7,6 +7,6 @@ export default function App() {
 
     <h1>Proyecto mamá</h1>
 
-    <PreviewList listData={infonavprev} />
+    <ListView listData={listview} />
   </main>
 };
