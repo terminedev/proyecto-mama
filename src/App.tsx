@@ -1,9 +1,9 @@
-import Carousel from "./components/Carousel/Carousel";
+import { CarouselButtons } from "./components/Carousel/Carousel";
 
 export default function App() {
   return <main>
     <h1>Proyecto mamá</h1>
 
-    <Carousel />
+    <CarouselButtons indexPage={0} />
   </main>
 };

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Carousel } from '../../typed/interfaces';
+import { MAX_QUANTITY_CAROUSEL } from '../../typed/constants';
 
 // Definir la interface de Props
 interface CarouselProps {
@@ -26,20 +27,31 @@ export default function Carousel({
 // COMPONENTES COMPLEMENTARIOS
 // -----------------
 
-
+// Botones del Carrusel:
 interface CarouselButtonsProps {
     indexPage: number;
 }
 export function CarouselButtons({ indexPage }: CarouselButtonsProps) {
 
-    // Retroceder página:
-    const goBackPage = () => {
 
+    const [currentIndex, setCurrentIndex] = useState(indexPage);
+
+    // Actualizar indice de páginación:
+    // Dirección: 0 (izquierda) - 1 (derecha)
+    const updatePaginationIndex = (address: number) => {
+
+        if (address === 0) {
+            setCurrentIndex(prevIndex => prevIndex > 0 ? prevIndex - 1 : prevIndex);
+        }
+
+        if (address === 1) {
+            setCurrentIndex(prevIndex => prevIndex < MAX_QUANTITY_CAROUSEL ? prevIndex + 1 : prevIndex);
+        }
     };
 
     return <>
-        <button>◀</button>
-        <button>{indexPage}</button>
-        <button>▶</button>
+        <button onClick={() => updatePaginationIndex(0)}>◀</button>
+        <button>{currentIndex}</button>
+        <button onClick={() => updatePaginationIndex(1)}>▶</button>
     </>
 };
