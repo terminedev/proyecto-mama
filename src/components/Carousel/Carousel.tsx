@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import type { Carousel } from '../../typed/interfaces';
+import type { InfoNavPrev } from '../../typed/interfaces';
 
 // Definir la interface de Props
 interface CarouselProps {
-    carousel: Carousel[];
+    carousel: InfoNavPrev[];
 }
 
 export default function Carousel({
@@ -50,7 +50,7 @@ export default function Carousel({
     return (
         <section style={styles.section as React.CSSProperties}>
             <img src={currentPage?.cover} alt="Carousel slide" style={styles.image} />
-            <p>{currentPage?.message}</p>
+            <p>{currentPage?.title}</p>
             <a href={currentPage?.link} style={styles.link}>Inspeccionar</a>
 
             <CarouselButtons
@@ -70,9 +70,9 @@ export default function Carousel({
 
 // Botones del Carrusel:
 interface CarouselButtonsProps {
-    setCurrentPage: React.Dispatch<React.SetStateAction<Carousel>>;
+    setCurrentPage: React.Dispatch<React.SetStateAction<InfoNavPrev>>;
     totalNumberPages: number;
-    carousel: Carousel[];
+    carousel: InfoNavPrev[];
 }
 
 export function CarouselButtons({

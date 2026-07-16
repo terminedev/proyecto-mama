@@ -1,12 +1,12 @@
-import Carousel from "./components/Carousel/Carousel";
-import carouselExample from './components/Carousel/carousel.example.json'
+import PreviewList from "./components/PreviewList/PreviewList";
+import infonavprev from './typed/infonavprev.example.json';
 
 export default function App() {
 
   return <main>
 
     <h1>Proyecto mamá</h1>
-    <Carousel carousel={carouselExample} />
 
+    <PreviewList listData={infonavprev} />
   </main>
 };

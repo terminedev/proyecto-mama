@@ -1,6 +1,6 @@
-// Carrusel
-export interface Carousel {
+// Previsuación de información para navegar:
+export interface InfoNavPrev {
     cover: string,
-    message: string,
+    title: string,
     link: string
 };

@@ -1,0 +1,127 @@
+[
+    {
+        "cover": "https://ejemplo.com/img1.jpg",
+        "title": "Bienvenido a nuestra plataforma",
+        "link": "/inicio"
+    },
+    {
+        "cover": "https://ejemplo.com/img2.jpg",
+        "title": "Descubre nuestras funcionalidades",
+        "link": "/features"
+    },
+    {
+        "cover": "https://ejemplo.com/img3.jpg",
+        "title": "Conecta con tu equipo",
+        "link": "/equipo"
+    },
+    {
+        "cover": "https://ejemplo.com/img4.jpg",
+        "title": "Comienza hoy mismo",
+        "link": "/registro"
+    },
+    {
+        "cover": "https://ejemplo.com/img5.jpg",
+        "title": "Nueva actualización disponible",
+        "link": "/updates"
+    },
+    {
+        "cover": "https://ejemplo.com/img6.jpg",
+        "title": "Mejoramos la velocidad de carga",
+        "link": "/performance"
+    },
+    {
+        "cover": "https://ejemplo.com/img7.jpg",
+        "title": "Explora el nuevo diseño",
+        "link": "/design"
+    },
+    {
+        "cover": "https://ejemplo.com/img8.jpg",
+        "title": "Integraciones con terceros",
+        "link": "/integrations"
+    },
+    {
+        "cover": "https://ejemplo.com/img9.jpg",
+        "title": "Tutoriales para principiantes",
+        "link": "/tutoriales"
+    },
+    {
+        "cover": "https://ejemplo.com/img10.jpg",
+        "title": "Seguridad mejorada al máximo",
+        "link": "/seguridad"
+    },
+    {
+        "cover": "https://ejemplo.com/img11.jpg",
+        "title": "Soporte técnico 24/7",
+        "link": "/soporte"
+    },
+    {
+        "cover": "https://ejemplo.com/img12.jpg",
+        "title": "Únete a nuestra comunidad",
+        "link": "/comunidad"
+    },
+    {
+        "cover": "https://ejemplo.com/img13.jpg",
+        "title": "Reportes personalizados",
+        "link": "/reportes"
+    },
+    {
+        "cover": "https://ejemplo.com/img14.jpg",
+        "title": "Configura tus preferencias",
+        "link": "/ajustes"
+    },
+    {
+        "cover": "https://ejemplo.com/img15.jpg",
+        "title": "Nuevos temas visuales",
+        "link": "/temas"
+    },
+    {
+        "cover": "https://ejemplo.com/img16.jpg",
+        "title": "Exporta tus datos fácilmente",
+        "link": "/exportar"
+    },
+    {
+        "cover": "https://ejemplo.com/img17.jpg",
+        "title": "Acceso offline disponible",
+        "link": "/offline"
+    },
+    {
+        "cover": "https://ejemplo.com/img18.jpg",
+        "title": "Historial de actividades",
+        "link": "/historial"
+    },
+    {
+        "cover": "https://ejemplo.com/img19.jpg",
+        "title": "Notificaciones inteligentes",
+        "link": "/notificaciones"
+    },
+    {
+        "cover": "https://ejemplo.com/img20.jpg",
+        "title": "Gestión de roles de usuario",
+        "link": "/roles"
+    },
+    {
+        "cover": "https://ejemplo.com/img21.jpg",
+        "title": "Calendario compartido",
+        "link": "/calendario"
+    },
+    {
+        "cover": "https://ejemplo.com/img22.jpg",
+        "title": "Herramientas de colaboración",
+        "link": "/colaboracion"
+    },
+    {
+        "cover": "https://ejemplo.com/img23.jpg",
+        "title": "Sincronización en la nube",
+        "link": "/nube"
+    },
+    {
+        "cover": "https://ejemplo.com/img24.jpg",
+        "title": "Preguntas frecuentes (FAQ)",
+        "link": "/faq"
+    },
+    {
+        "cover": "https://ejemplo.com/img25.jpg",
+        "title": "Contáctanos para más info",
+        "link": "/contacto"
+    }
+]
