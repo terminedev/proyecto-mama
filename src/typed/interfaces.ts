@@ -12,3 +12,16 @@ export interface InfoView {
     message: string,
     publicationDate: string
 };
+
+// Información del autor:
+export interface InfoAuthor {
+    profilePicture: string,
+    aboutMe: string,
+    contactMe: Contact[],
+}
+
+// Redes Sociales:
+export interface Contact {
+    name: string,
+    link: string
+}
