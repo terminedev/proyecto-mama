@@ -1,4 +1,4 @@
-import type { InfoView } from "../../typed/interfaces";
+import type { InfoView } from "../../../typed/interfaces";
 
 // Definir la interface de Props
 interface ListViewProps {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { InfoAuthor } from "../../typed/interfaces";
+import type { InfoAuthor } from "../../../typed/interfaces";
 
 // Definir la interface de Props
 interface AboutMeProps {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { InfoNavPrev } from '../../typed/interfaces';
+import type { InfoNavPrev } from '../../../typed/interfaces';
 
 // Definir la interface de Props
 interface CarouselProps {

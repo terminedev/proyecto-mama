@@ -1,12 +1,9 @@
-import ListView from "./components/ListView/ListView";
-import listview from './components/ListView/listview.example.json';
+import MainNav from "./components/navigation/MainNav/MainNav";
 
 export default function App() {
-
-  return <main>
-
-    <h1>Proyecto mamá</h1>
-
-    <ListView listData={listview} />
-  </main>
-};
+  return (
+    <main>
+      <MainNav />
+    </main>
+  );
+}

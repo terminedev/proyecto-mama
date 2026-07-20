@@ -34,12 +34,12 @@
   --warning: #EE00FF;
   --information: #94FF8A;
 
-  --fs-h1: clamp(2.5rem, 2rem + 3vw, 4rem);
-  --fs-h2: clamp(2rem, 1.5rem + 2.5vw, 3.25rem);
-  --fs-h3: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
-  --fs-h4: clamp(1.5rem, 1.1rem + 1.5vw, 2rem);
-  --fs-h5: 1.25rem;
-  --fs-h6: 1.1rem;
+  --fs-h1: clamp(2rem, 1.6rem + 2vw, 3rem);
+  --fs-h2: clamp(1.65rem, 1.35rem + 1.5vw, 2.5rem);
+  --fs-h3: clamp(1.4rem, 1.15rem + 1.2vw, 2rem);
+  --fs-h4: clamp(1.2rem, 1rem + 0.8vw, 1.6rem);
+  --fs-h5: 1.1rem;
+  --fs-h6: 1rem;
 }
 
 
@@ -102,37 +102,26 @@ CENTRALIZACIONES
 
 .center-list {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
 
   list-style: none;
-  padding: 0;
-  margin: 0;
-  gap: 1rem;
 }
 
+.scroll-row {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 
-/* 
------------------
-PUNTAJES
------------------ 
-*/
+  justify-content: start;
+  align-items: start;
 
+  overflow-x: hidden;
+  overflow-y: hidden;
 
-.score {
-  color: white;
-  font-size: var(--fs-h4);
-  filter: drop-shadow(0 0 1px #84e3f6) drop-shadow(0 0 5px #3ed5f3);
+  scrollbar-width: thin;
 }
 
-.score-point {
-  color: #da71fd;
-
-  text-shadow:
-    0 0 8px #bf00ff,
-    0 0 15px #bf00ff,
-    0 0 25px #8000ff;
-}
 
 
 /* 
