@@ -1,0 +1,18 @@
+{
+    "profilePicture": "https://example.com/images/author-profile.jpg",
+    "aboutMe": "Desarrollador de software apasionado por la tecnología, la web moderna y la creación de experiencias de usuario intuitivas.",
+    "contactMe": [
+        {
+            "name": "GitHub",
+            "link": "https://github.com/ejemplo"
+        },
+        {
+            "name": "LinkedIn",
+            "link": "https://linkedin.com/in/ejemplo"
+        },
+        {
+            "name": "Correo Electrónico",
+            "link": "mailto:contacto@ejemplo.com"
+        }
+    ]
+}

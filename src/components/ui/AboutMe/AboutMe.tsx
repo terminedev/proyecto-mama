@@ -1,5 +1,12 @@
 import { useState } from "react";
+
+// Tipado:
 import type { InfoAuthor } from "../../../typed/interfaces";
+
+// Modulos de estilo:
+import stylesStructure from "./AboutMe.module.css";
+
+
 
 // Definir la interface de Props
 interface AboutMeProps {
@@ -17,19 +24,29 @@ export default function AboutMe({ infoAuthor }: AboutMeProps) {
     // Gestionar contactos actuales:
     const [currentContacts] = useState(currentProfile?.contactMe || []);
 
+    // HTML:
     return (
-        <section>
-            <h2>Acerca de mí</h2>
-            <img src={currentProfile.profilePicture} alt="Foto de perfil" />
-            <p>{currentProfile.aboutMe}</p>
+        <section className={` ${stylesStructure.aboutSection}`}>
+            <h2 className={stylesStructure.title}>Acerca de mí</h2>
+            <img
+                src={currentProfile.profilePicture}
+                alt="Foto de perfil"
+                className={stylesStructure.profileImage}
+            />
+            <p className={stylesStructure.description}>{currentProfile.aboutMe}</p>
 
             {/* Contactos */}
-            <div className="contacts-container">
-                <h3>Contacto</h3>
-                <ul>
+            <div className={stylesStructure.contactsContainer}>
+                <h3 className={stylesStructure.contactsTitle}>Contacto</h3>
+                <ul className={stylesStructure.contactsList}>
                     {currentContacts.map((contact, index) => (
-                        <li key={index}>
-                            <a href={contact.link} target="_blank" rel="noopener noreferrer">
+                        <li key={index} className={stylesStructure.contactItem}>
+                            <a
+                                href={contact.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={stylesStructure.contactLink}
+                            >
                                 {contact.name}
                             </a>
                         </li>

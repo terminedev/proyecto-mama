@@ -1,3 +1,4 @@
+// Modulos de estilo:
 import stylesStructure from './MainNav.module.css';
 
 export default function MainNav() {
