@@ -20,8 +20,10 @@ export interface InfoAuthor {
     contactMe: Contact[],
 }
 
-// Redes Sociales:
+// Contactos del autor:
 export interface Contact {
     name: string,
     link: string
 }
+
+
