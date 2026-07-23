@@ -10,7 +10,8 @@ import {
     query,
     serverTimestamp,
     startAfter,
-    updateDoc
+    updateDoc,
+    where
 } from "firebase/firestore";
 import {
     db,
@@ -19,11 +20,11 @@ import {
 
 // Tipados: 
 import type {
-    Blog,
-    BlogPatch,
-    FormatResponse
+    FormatResponse,
+    Product,
+    ProductPatch
 } from "../interfaces";
-import { COLLECTION_LIMIT_BLOGS } from "../constants.ts";
+import { COLLECTION_LIMIT_PRODUCTS } from "../constants.ts";
 
 
 // ----------------------------------
@@ -31,7 +32,7 @@ import { COLLECTION_LIMIT_BLOGS } from "../constants.ts";
 // ----------------------------------
 
 
-const COLLECTION_NAME = "blogs";
+const COLLECTION_NAME = "products";
 
 
 // -----------------
@@ -44,14 +45,14 @@ const COLLECTION_NAME = "blogs";
 // -----------------
 
 
-// OBTENER la cantidad total de «blogs» en la colección:
-export const getBlogsCount = async (): Promise<FormatResponse> => {
+// OBTENER la cantidad total de «productos» en la colección:
+export const getProductsCount = async (): Promise<FormatResponse> => {
     try {
         const collRef = collection(db, COLLECTION_NAME);
         const snapshot = await getCountFromServer(collRef);
         const count = snapshot.data().count as number;
 
-        return formatResponse(true, count, "Cantidad de «blogs» obtenida exitosamente.");
+        return formatResponse(true, count, "Cantidad de «productos» obtenida exitosamente.");
 
     } catch (error) {
         if (error instanceof Error) {
@@ -62,20 +63,28 @@ export const getBlogsCount = async (): Promise<FormatResponse> => {
             console.error('Error desconocido:', error);
         }
 
-        return formatResponse(false, null, `Error al obtener la cantidad de «blogs».`);
+        return formatResponse(false, null, `Error al obtener la cantidad de «productos».`);
     }
 };
 
-// OBTENER «blogs» (con paginación):
-export const getBlogs = async (
+// OBTENER «productos» por categoría (con paginación opcional):
+export const getProductsByCategory = async (
+    category: string,
     limitCount: number | null = null,
-    lastDoc: any = null
+    lastDoc = null
 ): Promise<FormatResponse> => {
 
+    if (!category || category.length <= 0) return {
+        data: null,
+        message: 'Ingrese una categoría.',
+        response: false
+    };
+
     try {
-        const blogsCollectionRef = collection(db, COLLECTION_NAME);
+        const categoryCollectionRef = collection(db, COLLECTION_NAME);
         const queryConstraints = [];
 
+        if (category) queryConstraints.push(where('categories', 'array-contains', category));
 
         queryConstraints.push(orderBy('createdAt', 'asc'));
 
@@ -83,18 +92,19 @@ export const getBlogs = async (
 
         if (lastDoc) queryConstraints.push(startAfter(lastDoc));
 
+        // Construir la query final
         const q = queryConstraints.length > 0
-            ? query(blogsCollectionRef, ...queryConstraints)
-            : blogsCollectionRef;
+            ? query(categoryCollectionRef, ...queryConstraints)
+            : categoryCollectionRef;
 
         const querySnapshot = await getDocs(q);
-        const blogs: Blog[] = [];
+        const products: Product[] = [];
 
         querySnapshot.forEach((doc: any) => {
-            blogs.push({
+            products.push({
                 id: doc.id,
                 ...doc.data()
-            } as Blog);
+            } as Product);
         });
 
         const newLastDoc = querySnapshot.docs[querySnapshot.docs.length - 1] as unknown || null;
@@ -102,20 +112,23 @@ export const getBlogs = async (
         return formatResponse(
             true,
             {
-                blogs,
+                products,
                 lastDoc: newLastDoc
             },
-            "«Blogs» obtenidos exitosamente."
+            "«Productos» filtrados obtenidos exitosamente."
         );
 
     } catch (error) {
+
         if (error instanceof Error) {
+            // Aquí TypeScript sabe que 'error' es de tipo Error
             console.error(error.message);
         } else {
+            // Fallback por si lanzaron algo que no es un Error (como una cadena o null)
             console.error('Error desconocido:', error);
         }
 
-        return formatResponse(false, null, `Error en la búsqueda de «blogs».`);
+        return formatResponse(false, null, `Error en la búsqueda de «productos».`);
     }
 };
 
@@ -125,40 +138,40 @@ export const getBlogs = async (
 // -----------------
 
 
-// AGREGAR un nuevo «blog» (con limitación):
-export const addNewBlog = async (
-    newBlog: Blog,
+// AGREGAR un nuevo «producto» (con limitación):
+export const addNewProduct = async (
+    newProduct: Product,
     limitCount: number,
 ): Promise<FormatResponse> => {
 
-    // Si faltan datos del blog, no agregar nada:
-    if (!newBlog) return {
+    // Si faltan datos del «producto», no agregar nada:
+    if (!newProduct) return {
         data: null,
-        message: 'Ingrese datos de un «blog».',
+        message: 'Ingrese datos de un «producto».',
         response: false
     };
 
     // Si está al límite, no agregar nada:
-    if (limitCount >= COLLECTION_LIMIT_BLOGS) return {
+    if (limitCount >= COLLECTION_LIMIT_PRODUCTS) return {
         data: null,
-        message: 'Se superó la cantidad maxima de almacenamiento en «blogs»',
+        message: 'Se superó la cantidad maxima de almacenamiento en «productos»',
         response: false
     };
 
     try {
         // Preparamos el objeto agregando el timestamp del servidor
-        const blogDataToSave = {
-            ...newBlog,
+        const productDataToSave = {
+            ...newProduct,
             createdAt: serverTimestamp(),
         };
 
-        const docRef = await addDoc(collection(db, COLLECTION_NAME), blogDataToSave);
+        const docRef = await addDoc(collection(db, COLLECTION_NAME), productDataToSave);
 
         return formatResponse(true, {
-            ...newBlog,
+            ...newProduct,
             id: docRef.id,
             createdAt: new Date().toISOString(),
-        }, "«Blog» agregado exitosamente.");
+        }, "«Producto» agregado exitosamente.");
 
     } catch (error) {
         if (error instanceof Error) {
@@ -167,7 +180,7 @@ export const addNewBlog = async (
             console.error('Error desconocido:', error);
         }
 
-        return formatResponse(false, null, `Error al almacenar el nuevo «blog».`);
+        return formatResponse(false, null, `Error al almacenar el nuevo «producto».`);
     }
 };
 
@@ -177,29 +190,29 @@ export const addNewBlog = async (
 // -----------------
 
 
-// ACTUALIZAR y EDITAR un «blog» existente por su ID:
-export const updateBlog = async (
-    blogID: string,
-    updatedData: BlogPatch
+// ACTUALIZAR y EDITAR un «producto» existente por su ID:
+export const updateProduct = async (
+    productID: string,
+    updatedData: ProductPatch
 ): Promise<FormatResponse> => {
 
-    // Si falta ID del blog, no editar nada:
-    if (!blogID || blogID.length <= 0) return {
+    // Si falta ID del producto, no editar nada:
+    if (!productID || productID.length <= 0) return {
         data: null,
-        message: 'Ingrese el ID del blog.',
+        message: 'Ingrese el ID del «producto».',
         response: false
     };
 
     try {
-        const docRef = doc(db, COLLECTION_NAME, blogID);
+        const docRef = doc(db, COLLECTION_NAME, productID);
 
         await updateDoc(docRef, updatedData as any);
 
         return formatResponse(true, {
-            id: blogID,
+            id: productID,
             ...updatedData
         },
-            "«Blog» actualizado exitosamente.");
+            "«Producto» actualizado exitosamente.");
 
     } catch (error) {
         if (error instanceof Error) {
@@ -208,7 +221,7 @@ export const updateBlog = async (
             console.error('Error desconocido:', error);
         }
 
-        return formatResponse(false, null, `Error al actualizar el «blog».`);
+        return formatResponse(false, null, `Error al actualizar el «producto».`);
     }
 };
 
@@ -218,23 +231,23 @@ export const updateBlog = async (
 // -----------------
 
 
-// ELIMINAR un «blog» existente por su ID:
-export const deleteBlog = async (
-    blogID: string,
+// ELIMINAR un «producto» existente por su ID:
+export const deleteProduct = async (
+    productID: string,
 ): Promise<FormatResponse> => {
 
-    // Si falta ID del blog, no eliminar nada:
-    if (!blogID || blogID.length <= 0) return {
+    // Si falta ID del producto, no eliminar nada:
+    if (!productID || productID.length <= 0) return {
         data: null,
-        message: 'Ingrese el ID del blog.',
+        message: 'Ingrese el ID del «producto».',
         response: false
     };
 
     try {
-        const docRef = doc(db, COLLECTION_NAME, blogID);
+        const docRef = doc(db, COLLECTION_NAME, productID);
         await deleteDoc(docRef);
 
-        return formatResponse(true, null, "«Blog» eliminado exitosamente.");
+        return formatResponse(true, null, "«Producto» eliminado exitosamente.");
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);
@@ -242,8 +255,6 @@ export const deleteBlog = async (
             console.error('Error desconocido:', error);
         }
 
-        return formatResponse(false, null, `Error al eliminar el «blog».`);
+        return formatResponse(false, null, `Error al eliminar el «producto».`);
     }
 };
-
-
