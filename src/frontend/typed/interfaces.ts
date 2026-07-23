@@ -1,5 +1,6 @@
 // Previsuación de información para navegar:
 export interface InfoNavPrev {
+    id: string,
     cover: string,
     message: string,
     link: string
@@ -7,6 +8,7 @@ export interface InfoNavPrev {
 
 // Visuación de información:
 export interface InfoView {
+    id: string,
     images: string[],
     title: string,
     message: string,
