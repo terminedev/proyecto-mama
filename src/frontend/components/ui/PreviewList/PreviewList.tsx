@@ -1,10 +1,18 @@
+// Tipado:
 import type { InfoNavPrev } from "../../../typed/interfaces";
+
+// Modulos de estilo:
+
+
+// ---------------------------------------------
+
 
 // Definir la interface de Props
 interface PreviewListProps {
     listData: InfoNavPrev[];
 }
 
+// Lista de elementos navegables: 
 export default function PreviewList({
     listData
 }: PreviewListProps) {
@@ -42,7 +50,7 @@ export default function PreviewList({
                                     borderRadius: '4px'
                                 }}
                             />
-                            <p style={{ margin: 0, fontWeight: 500 }}>{element?.title}</p>
+                            <p style={{ margin: 0, fontWeight: 500 }}>{element?.message}</p>
                         </a>
                     </li>
                     <hr style={{ border: '0', borderTop: '1px solid #eee', margin: '10px 0' }} />
