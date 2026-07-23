@@ -13,7 +13,6 @@ export interface InfoView {
     title: string,
     message: string,
     createdAt: string,
-    clearName: string,
 };
 
 // Información del autor:
