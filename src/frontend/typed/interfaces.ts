@@ -10,6 +10,7 @@ export interface InfoView {
     images: string[],
     title: string,
     message: string,
+    createdAt: string,
     publicationDate: string
 };
 
