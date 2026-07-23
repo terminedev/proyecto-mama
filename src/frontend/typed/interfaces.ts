@@ -12,7 +12,8 @@ export interface InfoView {
     images: string[],
     title: string,
     message: string,
-    createdAt: string
+    createdAt: string,
+    clearName: string,
 };
 
 // Información del autor:
