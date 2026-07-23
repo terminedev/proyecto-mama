@@ -1,7 +1,7 @@
 // Previsuación de información para navegar:
 export interface InfoNavPrev {
     cover: string,
-    title: string,
+    message: string,
     link: string
 };
 

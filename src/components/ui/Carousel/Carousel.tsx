@@ -1,11 +1,19 @@
 import { useState } from 'react';
+
+// Tipado:
 import type { InfoNavPrev } from '../../../typed/interfaces';
 
-// Definir la interface de Props
+// Modulos de estilo:
+import stylesStructure from "./Carousel.module.css";
+
+// ---------------------------------------------
+
+// Definir la interface de Props:
 interface CarouselProps {
     carousel: InfoNavPrev[];
 }
 
+// Carrusel de elementos:
 export default function Carousel({
     carousel
 }: CarouselProps) {
@@ -13,51 +21,20 @@ export default function Carousel({
     // Omitir carrusel sin datos:
     if (!carousel || carousel.length <= 0) return null;
 
-
     // Gestionar página actual del carrusel:
     const [currentPage, setCurrentPage] = useState(carousel[0] || {});
 
-    // Estilos básicos
-    const styles = {
-        section: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '1rem',
-            padding: '2rem',
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            maxWidth: '500px',
-            margin: '0 auto',
-            textAlign: 'center'
-        },
-        image: {
-            width: '100%',
-            height: 'auto',
-            borderRadius: '4px'
-        },
-        link: {
-            display: 'inline-block',
-            padding: '8px 16px',
-            backgroundColor: '#0070f3',
-            color: 'white',
-            textDecoration: 'none',
-            borderRadius: '4px'
-        }
-    };
-
     // HTML:
     return (
-        <section style={styles.section as React.CSSProperties}>
-            <img src={currentPage?.cover} alt="Carousel slide" style={styles.image} />
-            <p>{currentPage?.title}</p>
-            <a href={currentPage?.link} style={styles.link}>Inspeccionar</a>
-
+        <section className={`defaultSpacing ${stylesStructure.carouselContainer}`}>
+            <img src={currentPage?.cover} alt="" className={stylesStructure.carouselImage} />
             <CarouselButtons
                 setCurrentPage={setCurrentPage}
                 totalNumberPages={carousel.length}
                 carousel={carousel}
             />
+            <p className={stylesStructure.carouselMessage}>{currentPage?.message}</p>
+            <a href={currentPage?.link} className={`btnDefault ${stylesStructure.carouselLink}`}>Inspeccionar</a>
         </section>
     );
 };
@@ -81,26 +58,13 @@ export function CarouselButtons({
     carousel
 }: CarouselButtonsProps) {
 
-    const listStyle = {
-        display: 'flex',
-        listStyle: 'none',
-        gap: '0.5rem',
-        padding: 0,
-        marginTop: '1rem'
-    };
-
-    const buttonStyle = {
-        padding: '5px 10px',
-        cursor: 'pointer'
-    };
-
     return (
-        <ul style={listStyle as React.CSSProperties}>
+        <ul className={`center-list  ${stylesStructure.buttonsList}`}>
             {Array.from({ length: totalNumberPages }, (_, i) => i + 1).map((page) => (
-                <li key={page}>
+                <li key={page} className={stylesStructure.buttonItem}>
                     <button
-                        style={buttonStyle}
                         onClick={() => setCurrentPage(carousel[page - 1])}
+                        className={`btnDefault ${stylesStructure.paginationButton}`}
                     >
                         {page}
                     </button>

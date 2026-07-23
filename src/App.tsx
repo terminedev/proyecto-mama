@@ -1,10 +1,10 @@
-import AboutMe from "./components/ui/AboutMe/AboutMe";
-import example from './components/ui/AboutMe/aboutme.example.json';
+import Carousel from "./components/ui/Carousel/Carousel";
+import example from './components/ui/Carousel/carousel.example.json';
 
 export default function App() {
 
   return <main>
 
-    <AboutMe infoAuthor={example} />
+    <Carousel carousel={example} />
   </main>
 }

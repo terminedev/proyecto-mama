@@ -72,6 +72,18 @@ html {
 
 /* 
 -----------------
+ESPACIADOS
+----------------- 
+*/
+.defaultSpacing {
+  padding: .5rem;
+  margin: .5rem;
+}
+
+
+
+/* 
+-----------------
 CENTRALIZACIONES 
 ----------------- 
 */
@@ -134,7 +146,7 @@ BOTONES
 */
 
 
-.boton-retro {
+.btnDefault {
   background-color: rgba(0, 0, 0, 0.693);
   border: none;
 
@@ -143,12 +155,11 @@ BOTONES
   font-style: normal;
   font-size: var(--fs-h5);
 
-  padding: 12px 40px;
+  padding: .5rem 1rem;
   border-radius: 7px;
   cursor: pointer;
 
   transition: all 0.3s ease-in-out;
-  margin: 10px;
 }
 
 .boton-retro:active {
