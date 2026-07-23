@@ -1,0 +1,51 @@
+.aboutSection {
+    padding: .5rem;
+    margin: .5rem;
+
+    text-align: center;
+    gap: 1.5rem;
+}
+
+.title {
+    font-size: var(--fs-h2);
+}
+
+.profileImage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 1px solid white;
+
+    margin-bottom: 2rem;
+}
+
+.description {
+    padding: .5rem;
+    margin-bottom: 2rem;
+}
+
+.contactsContainer {
+    border: 1px solid white;
+    padding: 1rem;
+}
+
+.contactsTitle {
+    font-size: var(--fs-h2);
+    margin-bottom: 2rem;
+}
+
+.contactsList {
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.contactItem {
+    padding: 1rem;
+    border: 1px solid white;
+}
+
+.contactLink {
+    text-decoration: none;
+}

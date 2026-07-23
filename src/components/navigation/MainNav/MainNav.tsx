@@ -1,6 +1,9 @@
 // Modulos de estilo:
 import stylesStructure from './MainNav.module.css';
 
+// ---------------------------------------------
+
+// Navegación principal del proyecto:
 export default function MainNav() {
     return (
         <nav className={`center-all ${stylesStructure.mainNav}`}>

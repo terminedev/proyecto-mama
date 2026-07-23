@@ -6,13 +6,14 @@ import type { InfoAuthor } from "../../../typed/interfaces";
 // Modulos de estilo:
 import stylesStructure from "./AboutMe.module.css";
 
-
+// ---------------------------------------------
 
 // Definir la interface de Props
 interface AboutMeProps {
     infoAuthor: InfoAuthor;
 }
 
+// Sección "Acerca de mí" del autor. [Información personal y contactos]:
 export default function AboutMe({ infoAuthor }: AboutMeProps) {
 
     // Omitir perfil sin datos:
@@ -26,7 +27,7 @@ export default function AboutMe({ infoAuthor }: AboutMeProps) {
 
     // HTML:
     return (
-        <section className={` ${stylesStructure.aboutSection}`}>
+        <section className={`center-all ${stylesStructure.aboutSection}`}>
             <h2 className={stylesStructure.title}>Acerca de mí</h2>
             <img
                 src={currentProfile.profilePicture}
@@ -38,9 +39,9 @@ export default function AboutMe({ infoAuthor }: AboutMeProps) {
             {/* Contactos */}
             <div className={stylesStructure.contactsContainer}>
                 <h3 className={stylesStructure.contactsTitle}>Contacto</h3>
-                <ul className={stylesStructure.contactsList}>
+                <ul className={`center-list ${stylesStructure.contactsList}`}>
                     {currentContacts.map((contact, index) => (
-                        <li key={index} className={stylesStructure.contactItem}>
+                        <li key={index} className={`center-all ${stylesStructure.contactItem}`}>
                             <a
                                 href={contact.link}
                                 target="_blank"
