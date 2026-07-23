@@ -1,9 +1,9 @@
-// import { auth } from '../main';
-// import {
-//     signInWithEmailAndPassword,
-//     signOut,
-//     onAuthStateChanged
-// } from 'firebase/auth';
+import { auth } from '../main';
+import {
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+} from 'firebase/auth';
 
 import type { FormatResponse, User } from "../interfaces";
 import { formatResponse } from "../main";
@@ -57,10 +57,8 @@ export const logoutUser = async (): Promise<FormatResponse> => {
         );
     } catch (error) {
         if (error instanceof Error) {
-            // Aquí TypeScript sabe que 'error' es de tipo Error
             console.error(error.message);
         } else {
-            // Fallback por si lanzaron algo que no es un Error (como una cadena o null)
             console.error('Error desconocido:', error);
         }
 

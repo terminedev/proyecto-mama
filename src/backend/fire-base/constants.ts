@@ -1,2 +1,3 @@
-export const MAXIMUM_COLLECTION_LIMIT = 20;
-export const MAX_PAGINATION = 5;
+export const NUM_OF_PRODUCTS_PAGE = 20;
+
+export const COLLECTION_LIMIT_BLOGS = 99; 
