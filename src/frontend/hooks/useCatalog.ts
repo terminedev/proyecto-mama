@@ -1,20 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
-    getBlogs,
-    getBlogsCount,
-    addNewBlog,
-    updateBlog,
-    deleteBlog
-} from './backend/fire-base/controllers/blog.controller.ts';
-import { NUM_OF_BLOGS_PAGE } from './backend/fire-base/constants.ts';
+    getCatalogs,
+    getCatalogsCount,
+    addCatalog,
+    updateCatalog,
+    deleteCatalog
+} from './backend/fire-base/controllers/catalog.controller.ts';
+import { NUM_OF_CATALOGS_PAGE } from './backend/fire-base/constants.ts'; // O ajusta la constante según corresponda
 
 // Tipado:
-import type { Blog, BlogPatch } from './backend/fire-base/interfaces.ts';
+import type { Catalog, CatalogPatch } from './backend/fire-base/interfaces.ts';
 
 // Interfaces:
-export interface GetBlogsData {
+export interface GetCatalogsData {
     data: {
-        blogs: Blog[],
+        catalogs: Catalog[],
         lastDoc: any,
     },
     message: string | null,
@@ -26,7 +26,7 @@ export interface GetBlogsData {
     }
 };
 
-export interface BlogActionStatus {
+export interface CatalogActionStatus {
     isLoading: boolean;
     isError: boolean;
     message: string | null;
@@ -34,16 +34,14 @@ export interface BlogActionStatus {
 
 // ---------------------------------------------
 
-export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
+export function useCatalogs(initialLimitCount: number = NUM_OF_CATALOGS_PAGE) {
 
     // -----------------
     // GET STATES
     // -----------------
-
-
-    const [getBlogsData, setGetBlogsData] = useState<GetBlogsData>({
+    const [getCatalogsData, setGetCatalogsData] = useState<GetCatalogsData>({
         data: {
-            blogs: [],
+            catalogs: [],
             lastDoc: null
         },
         message: null,
@@ -55,32 +53,29 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
         }
     });
 
-    const [blogsCount, setBlogsCount] = useState<number>(0);
-    const [countStatus, setCountStatus] = useState<BlogActionStatus>({
+    const [catalogsCount, setCatalogsCount] = useState<number>(0);
+    const [countStatus, setCountStatus] = useState<CatalogActionStatus>({
         isLoading: false,
         isError: false,
         message: null,
     });
-
 
     // -----------------
     // MUTATION STATES (Add, Update, Delete)
     // -----------------
-
-
-    const [addStatus, setAddStatus] = useState<BlogActionStatus>({
+    const [addStatus, setAddStatus] = useState<CatalogActionStatus>({
         isLoading: false,
         isError: false,
         message: null,
     });
 
-    const [updateStatus, setUpdateStatus] = useState<BlogActionStatus>({
+    const [updateStatus, setUpdateStatus] = useState<CatalogActionStatus>({
         isLoading: false,
         isError: false,
         message: null,
     });
 
-    const [deleteStatus, setDeleteStatus] = useState<BlogActionStatus>({
+    const [deleteStatus, setDeleteStatus] = useState<CatalogActionStatus>({
         isLoading: false,
         isError: false,
         message: null,
@@ -88,12 +83,10 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
 
 
     // -----------------
-    // FETCH BLOGS (GET)
+    // FETCH CATALOGS (GET)
     // -----------------
-
-
-    const fetchBlogs = useCallback(async (limit: number | null, docRef: any, isInitial: boolean) => {
-        setGetBlogsData(prev => ({
+    const fetchCatalogs = useCallback(async (limit: number | null, docRef: any, isInitial: boolean) => {
+        setGetCatalogsData(prev => ({
             ...prev,
             status: {
                 ...prev.status,
@@ -105,23 +98,23 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
         }));
 
         try {
-            const response = await getBlogs(limit, docRef);
+            const response = await getCatalogs(limit, docRef);
 
             if (response.success) {
-                const newBlogs = response.data.blogs;
+                const newCatalogs = response.data.catalogs;
                 const newLastDoc = response.data.lastDoc;
                 const newMessage = response.message;
 
-                setGetBlogsData(prev => ({
+                setGetCatalogsData(prev => ({
                     ...prev,
                     data: {
-                        blogs: isInitial ? newBlogs : [...prev.data.blogs, ...newBlogs],
+                        catalogs: isInitial ? newCatalogs : [...prev.data.catalogs, ...newCatalogs],
                         lastDoc: newLastDoc
                     },
                     message: newMessage,
                     status: {
                         ...prev.status,
-                        hasMore: !(newBlogs.length === 0 || (limit && newBlogs.length < limit))
+                        hasMore: !(newCatalogs.length === 0 || (limit && newCatalogs.length < limit))
                     }
                 }));
             }
@@ -129,7 +122,7 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
             console.error(err);
             const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
 
-            setGetBlogsData(prev => ({
+            setGetCatalogsData(prev => ({
                 ...prev,
                 message: errorMessage,
                 status: {
@@ -137,9 +130,8 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
                     isError: true
                 }
             }));
-
         } finally {
-            setGetBlogsData(prev => ({
+            setGetCatalogsData(prev => ({
                 ...prev,
                 status: {
                     ...prev.status,
@@ -147,32 +139,29 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
                     isLoadingMore: false
                 }
             }));
-
         }
     }, []);
 
-    const loadMoreBlogs = () => {
+    const loadMoreCatalogs = () => {
         if (
-            !getBlogsData.status.isLoadingMore
-            && getBlogsData.status.hasMore
-            && getBlogsData.data.lastDoc
+            !getCatalogsData.status.isLoadingMore
+            && getCatalogsData.status.hasMore
+            && getCatalogsData.data.lastDoc
         ) {
-            fetchBlogs(initialLimitCount, getBlogsData.data.lastDoc, false);
+            fetchCatalogs(initialLimitCount, getCatalogsData.data.lastDoc, false);
         }
     };
 
 
     // -----------------
-    // GET BLOGS COUNT
+    // GET CATALOGS COUNT
     // -----------------
-
-
-    const fetchBlogsCount = useCallback(async () => {
+    const fetchCatalogsCount = useCallback(async () => {
         setCountStatus({ isLoading: true, isError: false, message: null });
         try {
-            const response = await getBlogsCount();
+            const response = await getCatalogsCount();
             if (response.success) {
-                setBlogsCount(response.data);
+                setCatalogsCount(response.data);
                 setCountStatus({ isLoading: false, isError: false, message: response.message });
             } else {
                 setCountStatus({ isLoading: false, isError: true, message: response.message });
@@ -185,18 +174,15 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
 
 
     // -----------------
-    // ADD BLOG (SET)
+    // ADD CATALOG (SET)
     // -----------------
-
-
-    const handleAddBlog = async (newBlog: Blog, currentLimitCount: number) => {
+    const handleAddCatalog = async (newCatalog: Catalog, currentLimitCount: number) => {
         setAddStatus({ isLoading: true, isError: false, message: null });
-
         try {
-            const response = await addNewBlog(newBlog, currentLimitCount);
+            const response = await addCatalog(newCatalog, currentLimitCount);
             if (response.success) {
                 setAddStatus({ isLoading: false, isError: false, message: response.message });
-                fetchBlogs(initialLimitCount, null, true);
+                fetchCatalogs(initialLimitCount, null, true);
                 return response.data;
             } else {
                 setAddStatus({ isLoading: false, isError: true, message: response.message });
@@ -207,29 +193,25 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
             setAddStatus({ isLoading: false, isError: true, message: errorMessage });
             return null;
         }
-
     };
 
 
     // -----------------
-    // UPDATE BLOG (PATCH)
+    // UPDATE CATALOG (PATCH)
     // -----------------
-
-
-    const handleUpdateBlog = async (blogID: string, updatedData: BlogPatch) => {
+    const handleUpdateCatalog = async (catalogID: string, updatedData: CatalogPatch) => {
         setUpdateStatus({ isLoading: true, isError: false, message: null });
         try {
-            const response = await updateBlog(blogID, updatedData);
+            const response = await updateCatalog(catalogID, updatedData);
             if (response.success) {
                 setUpdateStatus({ isLoading: false, isError: false, message: response.message });
 
-                // Actualizar localmente el estado de los blogs para reflejar el cambio de inmediato
-                setGetBlogsData(prev => ({
+                setGetCatalogsData(prev => ({
                     ...prev,
                     data: {
                         ...prev.data,
-                        blogs: prev.data.blogs.map(blog =>
-                            blog.id === blogID ? { ...blog, ...updatedData } : blog
+                        catalogs: prev.data.catalogs.map(catalog =>
+                            catalog.id === catalogID ? { ...catalog, ...updatedData } : catalog
                         )
                     }
                 }));
@@ -247,23 +229,20 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
 
 
     // -----------------
-    // DELETE BLOG
+    // DELETE CATALOG
     // -----------------
-
-
-    const handleDeleteBlog = async (blogID: string) => {
+    const handleDeleteCatalog = async (catalogID: string) => {
         setDeleteStatus({ isLoading: true, isError: false, message: null });
         try {
-            const response = await deleteBlog(blogID);
+            const response = await deleteCatalog(catalogID);
             if (response.success) {
                 setDeleteStatus({ isLoading: false, isError: false, message: response.message });
 
-                // Remover localmente el blog eliminado del estado
-                setGetBlogsData(prev => ({
+                setGetCatalogsData(prev => ({
                     ...prev,
                     data: {
                         ...prev.data,
-                        blogs: prev.data.blogs.filter(blog => blog.id !== blogID)
+                        catalogs: prev.data.catalogs.filter(catalog => catalog.id !== catalogID)
                     }
                 }));
                 return true;
@@ -282,34 +261,27 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
     // -----------------
     // PRIMER RENDER:
     // -----------------
-
-
     useEffect(() => {
-        fetchBlogs(initialLimitCount, null, true);
-    }, [fetchBlogs, initialLimitCount]);
+        fetchCatalogs(initialLimitCount, null, true);
+    }, [fetchCatalogs, initialLimitCount]);
 
 
     return {
-        // Datos y funciones de lectura / paginación
-        getBlogsData,
-        loadMoreBlogs,
-        refetchBlogs: () => fetchBlogs(initialLimitCount, null, true),
+        getCatalogsData,
+        loadMoreCatalogs,
+        refetchCatalogs: () => fetchCatalogs(initialLimitCount, null, true),
 
-        // Conteo
-        blogsCount,
+        catalogsCount,
         countStatus,
-        fetchBlogsCount,
+        fetchCatalogsCount,
 
-        // Agregar
         addStatus,
-        handleAddBlog,
+        handleAddCatalog,
 
-        // Actualizar
         updateStatus,
-        handleUpdateBlog,
+        handleUpdateCatalog,
 
-        // Eliminar
         deleteStatus,
-        handleDeleteBlog,
+        handleDeleteCatalog,
     };
 }

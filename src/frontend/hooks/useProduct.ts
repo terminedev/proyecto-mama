@@ -1,20 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
-    getBlogs,
-    getBlogsCount,
-    addNewBlog,
-    updateBlog,
-    deleteBlog
-} from './backend/fire-base/controllers/blog.controller.ts';
-import { NUM_OF_BLOGS_PAGE } from './backend/fire-base/constants.ts';
+    getProductsByCategory,
+    getProductsCount,
+    addNewProduct,
+    updateProduct,
+    deleteProduct
+} from './backend/fire-base/controllers/product.controller.ts';
+import { NUM_OF_PRODUCTS_PAGE } from './backend/fire-base/constants.ts';
 
 // Tipado:
-import type { Blog, BlogPatch } from './backend/fire-base/interfaces.ts';
+import type { Product, ProductPatch } from './backend/fire-base/interfaces.ts';
 
 // Interfaces:
-export interface GetBlogsData {
+export interface GetProductsData {
     data: {
-        blogs: Blog[],
+        products: Product[],
         lastDoc: any,
     },
     message: string | null,
@@ -26,7 +26,7 @@ export interface GetBlogsData {
     }
 };
 
-export interface BlogActionStatus {
+export interface ProductActionStatus {
     isLoading: boolean;
     isError: boolean;
     message: string | null;
@@ -34,16 +34,17 @@ export interface BlogActionStatus {
 
 // ---------------------------------------------
 
-export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
+export function useProducts(category: string, initialLimitCount: number = NUM_OF_PRODUCTS_PAGE) {
+
 
     // -----------------
     // GET STATES
     // -----------------
 
 
-    const [getBlogsData, setGetBlogsData] = useState<GetBlogsData>({
+    const [getProductsData, setGetProductsData] = useState<GetProductsData>({
         data: {
-            blogs: [],
+            products: [],
             lastDoc: null
         },
         message: null,
@@ -55,32 +56,29 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
         }
     });
 
-    const [blogsCount, setBlogsCount] = useState<number>(0);
-    const [countStatus, setCountStatus] = useState<BlogActionStatus>({
+    const [productsCount, setProductsCount] = useState<number>(0);
+    const [countStatus, setCountStatus] = useState<ProductActionStatus>({
         isLoading: false,
         isError: false,
         message: null,
     });
-
 
     // -----------------
     // MUTATION STATES (Add, Update, Delete)
     // -----------------
-
-
-    const [addStatus, setAddStatus] = useState<BlogActionStatus>({
+    const [addStatus, setAddStatus] = useState<ProductActionStatus>({
         isLoading: false,
         isError: false,
         message: null,
     });
 
-    const [updateStatus, setUpdateStatus] = useState<BlogActionStatus>({
+    const [updateStatus, setUpdateStatus] = useState<ProductActionStatus>({
         isLoading: false,
         isError: false,
         message: null,
     });
 
-    const [deleteStatus, setDeleteStatus] = useState<BlogActionStatus>({
+    const [deleteStatus, setDeleteStatus] = useState<ProductActionStatus>({
         isLoading: false,
         isError: false,
         message: null,
@@ -88,12 +86,12 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
 
 
     // -----------------
-    // FETCH BLOGS (GET)
+    // FETCH PRODUCTS (POR CATEGORY)
     // -----------------
+    const fetchProducts = useCallback(async (currentCategory: string, limit: number | null, docRef: any, isInitial: boolean) => {
+        if (!currentCategory) return;
 
-
-    const fetchBlogs = useCallback(async (limit: number | null, docRef: any, isInitial: boolean) => {
-        setGetBlogsData(prev => ({
+        setGetProductsData(prev => ({
             ...prev,
             status: {
                 ...prev.status,
@@ -105,23 +103,23 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
         }));
 
         try {
-            const response = await getBlogs(limit, docRef);
+            const response = await getProductsByCategory(currentCategory, limit, docRef);
 
             if (response.success) {
-                const newBlogs = response.data.blogs;
+                const newProducts = response.data.products;
                 const newLastDoc = response.data.lastDoc;
                 const newMessage = response.message;
 
-                setGetBlogsData(prev => ({
+                setGetProductsData(prev => ({
                     ...prev,
                     data: {
-                        blogs: isInitial ? newBlogs : [...prev.data.blogs, ...newBlogs],
+                        products: isInitial ? newProducts : [...prev.data.products, ...newProducts],
                         lastDoc: newLastDoc
                     },
                     message: newMessage,
                     status: {
                         ...prev.status,
-                        hasMore: !(newBlogs.length === 0 || (limit && newBlogs.length < limit))
+                        hasMore: !(newProducts.length === 0 || (limit && newProducts.length < limit))
                     }
                 }));
             }
@@ -129,7 +127,7 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
             console.error(err);
             const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
 
-            setGetBlogsData(prev => ({
+            setGetProductsData(prev => ({
                 ...prev,
                 message: errorMessage,
                 status: {
@@ -137,9 +135,8 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
                     isError: true
                 }
             }));
-
         } finally {
-            setGetBlogsData(prev => ({
+            setGetProductsData(prev => ({
                 ...prev,
                 status: {
                     ...prev.status,
@@ -147,32 +144,32 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
                     isLoadingMore: false
                 }
             }));
-
         }
     }, []);
 
-    const loadMoreBlogs = () => {
+    const loadMoreProducts = () => {
         if (
-            !getBlogsData.status.isLoadingMore
-            && getBlogsData.status.hasMore
-            && getBlogsData.data.lastDoc
+            !getProductsData.status.isLoadingMore
+            && getProductsData.status.hasMore
+            && getProductsData.data.lastDoc
+            && category
         ) {
-            fetchBlogs(initialLimitCount, getBlogsData.data.lastDoc, false);
+            fetchProducts(category, initialLimitCount, getProductsData.data.lastDoc, false);
         }
     };
 
 
     // -----------------
-    // GET BLOGS COUNT
+    // GET PRODUCTS COUNT
     // -----------------
 
 
-    const fetchBlogsCount = useCallback(async () => {
+    const fetchProductsCount = useCallback(async () => {
         setCountStatus({ isLoading: true, isError: false, message: null });
         try {
-            const response = await getBlogsCount();
+            const response = await getProductsCount();
             if (response.success) {
-                setBlogsCount(response.data);
+                setProductsCount(response.data);
                 setCountStatus({ isLoading: false, isError: false, message: response.message });
             } else {
                 setCountStatus({ isLoading: false, isError: true, message: response.message });
@@ -185,18 +182,19 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
 
 
     // -----------------
-    // ADD BLOG (SET)
+    // ADD PRODUCT (SET)
     // -----------------
 
 
-    const handleAddBlog = async (newBlog: Blog, currentLimitCount: number) => {
+    const handleAddProduct = async (newProduct: Product, currentLimitCount: number) => {
         setAddStatus({ isLoading: true, isError: false, message: null });
-
         try {
-            const response = await addNewBlog(newBlog, currentLimitCount);
+            const response = await addNewProduct(newProduct, currentLimitCount);
             if (response.success) {
                 setAddStatus({ isLoading: false, isError: false, message: response.message });
-                fetchBlogs(initialLimitCount, null, true);
+                if (category) {
+                    fetchProducts(category, initialLimitCount, null, true);
+                }
                 return response.data;
             } else {
                 setAddStatus({ isLoading: false, isError: true, message: response.message });
@@ -207,29 +205,27 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
             setAddStatus({ isLoading: false, isError: true, message: errorMessage });
             return null;
         }
-
     };
 
 
     // -----------------
-    // UPDATE BLOG (PATCH)
+    // UPDATE PRODUCT (PATCH)
     // -----------------
 
 
-    const handleUpdateBlog = async (blogID: string, updatedData: BlogPatch) => {
+    const handleUpdateProduct = async (productID: string, updatedData: ProductPatch) => {
         setUpdateStatus({ isLoading: true, isError: false, message: null });
         try {
-            const response = await updateBlog(blogID, updatedData);
+            const response = await updateProduct(productID, updatedData);
             if (response.success) {
                 setUpdateStatus({ isLoading: false, isError: false, message: response.message });
 
-                // Actualizar localmente el estado de los blogs para reflejar el cambio de inmediato
-                setGetBlogsData(prev => ({
+                setGetProductsData(prev => ({
                     ...prev,
                     data: {
                         ...prev.data,
-                        blogs: prev.data.blogs.map(blog =>
-                            blog.id === blogID ? { ...blog, ...updatedData } : blog
+                        products: prev.data.products.map(product =>
+                            product.id === productID ? { ...product, ...updatedData } : product
                         )
                     }
                 }));
@@ -247,23 +243,22 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
 
 
     // -----------------
-    // DELETE BLOG
+    // DELETE PRODUCT
     // -----------------
 
 
-    const handleDeleteBlog = async (blogID: string) => {
+    const handleDeleteProduct = async (productID: string) => {
         setDeleteStatus({ isLoading: true, isError: false, message: null });
         try {
-            const response = await deleteBlog(blogID);
+            const response = await deleteProduct(productID);
             if (response.success) {
                 setDeleteStatus({ isLoading: false, isError: false, message: response.message });
 
-                // Remover localmente el blog eliminado del estado
-                setGetBlogsData(prev => ({
+                setGetProductsData(prev => ({
                     ...prev,
                     data: {
                         ...prev.data,
-                        blogs: prev.data.blogs.filter(blog => blog.id !== blogID)
+                        products: prev.data.products.filter(product => product.id !== productID)
                     }
                 }));
                 return true;
@@ -285,31 +280,30 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
 
 
     useEffect(() => {
-        fetchBlogs(initialLimitCount, null, true);
-    }, [fetchBlogs, initialLimitCount]);
+        if (category) {
+            fetchProducts(category, initialLimitCount, null, true);
+        }
+    }, [fetchProducts, category, initialLimitCount]);
 
 
     return {
-        // Datos y funciones de lectura / paginación
-        getBlogsData,
-        loadMoreBlogs,
-        refetchBlogs: () => fetchBlogs(initialLimitCount, null, true),
+        getProductsData,
+        loadMoreProducts,
+        refetchProducts: () => {
+            if (category) fetchProducts(category, initialLimitCount, null, true);
+        },
 
-        // Conteo
-        blogsCount,
+        productsCount,
         countStatus,
-        fetchBlogsCount,
+        fetchProductsCount,
 
-        // Agregar
         addStatus,
-        handleAddBlog,
+        handleAddProduct,
 
-        // Actualizar
         updateStatus,
-        handleUpdateBlog,
+        handleUpdateProduct,
 
-        // Eliminar
         deleteStatus,
-        handleDeleteBlog,
+        handleDeleteProduct,
     };
 }
