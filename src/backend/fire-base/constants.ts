@@ -1,4 +1,5 @@
 export const NUM_OF_BLOGS_PAGE = 7;
+export const NUM_OF_CATALOGS_PAGE = 10;
 
 export const COLLECTION_LIMIT_BLOGS = 99;
 export const COLLECTION_LIMIT_CATALOGS = 99;
