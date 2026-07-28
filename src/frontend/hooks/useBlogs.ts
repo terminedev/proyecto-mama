@@ -285,15 +285,15 @@ export function useBlogs(initialLimitCount: number = NUM_OF_BLOGS_PAGE) {
 
 
     useEffect(() => {
-        fetchBlogs(initialLimitCount, null, true);
-    }, [fetchBlogs, initialLimitCount]);
+        fetchBlogs(NUM_OF_BLOGS_PAGE, null, true);
+    }, [fetchBlogs, NUM_OF_BLOGS_PAGE]);
 
 
     return {
         // Datos y funciones de lectura / paginación
         getBlogsData,
         loadMoreBlogs,
-        refetchBlogs: () => fetchBlogs(initialLimitCount, null, true),
+        refetchBlogs: () => fetchBlogs(NUM_OF_BLOGS_PAGE, null, true),
 
         // Conteo
         blogsCount,

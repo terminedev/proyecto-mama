@@ -34,11 +34,13 @@ export interface CatalogActionStatus {
 
 // ---------------------------------------------
 
-export function useCatalogs(initialLimitCount: number = NUM_OF_CATALOGS_PAGE) {
+export function useCatalog(initialLimitCount: number = NUM_OF_CATALOGS_PAGE) {
 
     // -----------------
     // GET STATES
     // -----------------
+
+
     const [getCatalogsData, setGetCatalogsData] = useState<GetCatalogsData>({
         data: {
             catalogs: [],
@@ -262,14 +264,14 @@ export function useCatalogs(initialLimitCount: number = NUM_OF_CATALOGS_PAGE) {
     // PRIMER RENDER:
     // -----------------
     useEffect(() => {
-        fetchCatalogs(initialLimitCount, null, true);
-    }, [fetchCatalogs, initialLimitCount]);
+        fetchCatalogs(NUM_OF_CATALOGS_PAGE, null, true);
+    }, [fetchCatalogs, NUM_OF_CATALOGS_PAGE]);
 
 
     return {
         getCatalogsData,
         loadMoreCatalogs,
-        refetchCatalogs: () => fetchCatalogs(initialLimitCount, null, true),
+        refetchCatalogs: () => fetchCatalogs(NUM_OF_CATALOGS_PAGE, null, true),
 
         catalogsCount,
         countStatus,

@@ -278,14 +278,6 @@ export function useProducts(category: string, initialLimitCount: number = NUM_OF
     // PRIMER RENDER:
     // -----------------
 
-
-    useEffect(() => {
-        if (category) {
-            fetchProducts(category, initialLimitCount, null, true);
-        }
-    }, [fetchProducts, category, initialLimitCount]);
-
-
     return {
         getProductsData,
         loadMoreProducts,
